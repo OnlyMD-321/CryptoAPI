@@ -47,11 +47,12 @@ class AuthService {
         throw new Error('Invalid verification code');
       }
 
-      // Update the user's status to verified and set otp empty
-      await DBFactory.update('UPDATE Users SET isverified = true, otp = null WHERE email = $1', [email]);
-
       // Generate a JWT token
       const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+      // Update the user's status to verified and set otp empty
+      await DBFactory.update('UPDATE Users SET isverified = true, otp = null, token = $1 WHERE email = $2', [token, email]);
+      
       return token;
 
     } catch (error) {

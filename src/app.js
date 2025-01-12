@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const helmet = require('helmet');
 const dotenv = require('dotenv');
 const routes = require('./routes/routes');
 const pool = require('./config/db');
@@ -14,6 +15,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(helmet());
 
 
 app.use('/', routes );
