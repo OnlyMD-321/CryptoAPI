@@ -1,12 +1,13 @@
 const AuthService = require('../services/authService');
 
 const signup = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password , confirmPassword } = req.body;
 
   try {
-    const newUser = await AuthService.registerUser(email, password);
-    res.status(201).json({ user: newUser });
+    const newUser = await AuthService.registerUser(email, password, confirmPassword);
+    res.status(201).json({ status : 201, message: 'Please check your email for verification code', user: newUser });
   } catch (error) {
+    console.log(error);    
     res.status(400).json({ message: error.message });
   }
 };

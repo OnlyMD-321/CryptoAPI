@@ -1,22 +1,28 @@
 const express = require('express');
 const {
   createPortfolio,
-  getPortfolios,
-  getPortfolioById,
-  updatePortfolio,
-  deletePortfolio,
+  addCryptoToPortfolio,
+  editPortfolioItem,
+  deletePortfolioItem,
+  viewPortfolioPerformance,
 } = require('../controllers/portfolioController');
 const authenticate = require('../middlewares/authMiddleware');
+
 const router = express.Router();
 
-// Appliquer le middleware d'authentification
-router.use(authenticate);
+// Create Portfolio
+router.post('/create', authenticate, createPortfolio);
 
-// Endpoints
-router.post('/', createPortfolio); // Créer un portefeuille
-router.get('/', getPortfolios); // Récupérer tous les portefeuilles
-router.get('/:id', getPortfolioById); // Récupérer un portefeuille spécifique
-router.put('/:id', updatePortfolio); // Mettre à jour un portefeuille
-router.delete('/:id', deletePortfolio); // Supprimer un portefeuille
+// Add Cryptocurrency to Portfolio
+router.post('/add', authenticate, addCryptoToPortfolio);
+
+// Edit Portfolio Item
+router.put('/edit/:id', authenticate, editPortfolioItem);
+
+// Delete Portfolio Item
+router.delete('/delete/:id', authenticate, deletePortfolioItem);
+
+// View Portfolio Performance
+router.get('/performance', authenticate, viewPortfolioPerformance);
 
 module.exports = router;

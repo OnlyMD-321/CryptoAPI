@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const dotenv = require('dotenv');
 const routes = require('./routes/routes');
 const pool = require('./config/db');
+const createTables = require('./utils/createTables');
 
 // Charger les variables d'environnement
 dotenv.config();
@@ -16,6 +17,9 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(helmet());
+
+// Créer les tables de la base de données
+createTables();
 
 
 app.use('/', routes );

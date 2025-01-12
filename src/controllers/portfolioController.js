@@ -1,109 +1,66 @@
-const pool = require('../config/db');
+const PortfolioService = require('../services/portfolioService');
 
-// Créer un portefeuille
 const createPortfolio = async (req, res) => {
-  const { name } = req.body;
-  const userId = req.user.id; // ID de l'utilisateur authentifié
+  const { userId, name } = req.body;
 
   try {
-    const newPortfolio = await pool.query(
-      'INSERT INTO Portfolios (name, user_id) VALUES ($1, $2) RETURNING *',
-      [name, userId]
-    );
-    res.status(201).json(newPortfolio.rows[0]);
+    const portfolio = await PortfolioService.createPortfolio(userId, name);
+    res.status(201).json({ portfolio });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(400).json({ message: error.message });
   }
 };
 
-// Récupérer tous les portefeuilles d'un utilisateur
-const getPortfolios = async (req, res) => {
-  const userId = req.user.id;
+const addCryptoToPortfolio = async (req, res) => {
+  const { portfolioId } = req.params;
+  const { cryptoId, quantity, acquisitionCost } = req.body;
 
   try {
-    const portfolios = await pool.query(
-      'SELECT * FROM Portfolios WHERE user_id = $1',
-      [userId]
-    );
-    res.status(200).json(portfolios.rows);
+    const crypto = await PortfolioService.addCryptoToPortfolio(portfolioId, cryptoId, quantity, acquisitionCost);
+    res.status(201).json({ crypto });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(400).json({ message: error.message });
   }
 };
 
-// Récupérer un portefeuille spécifique
-const getPortfolioById = async (req, res) => {
-  const { id } = req.params;
-  const userId = req.user.id;
+const editPortfolioItem = async (req, res) => {
+  const { portfolioId, cryptoId } = req.params;
+  const { quantity, acquisitionCost } = req.body;
 
   try {
-    const portfolio = await pool.query(
-      'SELECT * FROM Portfolios WHERE id = $1 AND user_id = $2',
-      [id, userId]
-    );
-
-    if (portfolio.rows.length === 0) {
-      return res.status(404).json({ message: 'Portfolio not found' });
-    }
-
-    res.status(200).json(portfolio.rows[0]);
+    const updatedCrypto = await PortfolioService.editPortfolioItem(portfolioId, cryptoId, quantity, acquisitionCost);
+    res.status(200).json({ updatedCrypto });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(400).json({ message: error.message });
   }
 };
 
-// Mettre à jour un portefeuille
-const updatePortfolio = async (req, res) => {
-  const { id } = req.params;
-  const { name } = req.body;
-  const userId = req.user.id;
+const deletePortfolioItem = async (req, res) => {
+  const { portfolioId, cryptoId } = req.params;
 
   try {
-    const updatedPortfolio = await pool.query(
-      'UPDATE Portfolios SET name = $1, updated_at = NOW() WHERE id = $2 AND user_id = $3 RETURNING *',
-      [name, id, userId]
-    );
-
-    if (updatedPortfolio.rows.length === 0) {
-      return res.status(404).json({ message: 'Portfolio not found or unauthorized' });
-    }
-
-    res.status(200).json(updatedPortfolio.rows[0]);
+    await PortfolioService.deletePortfolioItem(portfolioId, cryptoId);
+    res.status(200).json({ message: 'Item removed from portfolio' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(400).json({ message: error.message });
   }
 };
 
-// Supprimer un portefeuille
-const deletePortfolio = async (req, res) => {
-  const { id } = req.params;
-  const userId = req.user.id;
+const viewPortfolioPerformance = async (req, res) => {
+  const { portfolioId } = req.params;
 
   try {
-    const deletedPortfolio = await pool.query(
-      'DELETE FROM Portfolios WHERE id = $1 AND user_id = $2 RETURNING *',
-      [id, userId]
-    );
-
-    if (deletedPortfolio.rows.length === 0) {
-      return res.status(404).json({ message: 'Portfolio not found or unauthorized' });
-    }
-
-    res.status(200).json({ message: 'Portfolio deleted successfully' });
+    const performance = await PortfolioService.viewPortfolioPerformance(portfolioId);
+    res.status(200).json({ performance });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(400).json({ message: error.message });
   }
 };
 
 module.exports = {
   createPortfolio,
-  getPortfolios,
-  getPortfolioById,
-  updatePortfolio,
-  deletePortfolio,
+  addCryptoToPortfolio,
+  editPortfolioItem,
+  deletePortfolioItem,
+  viewPortfolioPerformance,
 };
