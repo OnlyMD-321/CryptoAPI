@@ -4,7 +4,7 @@ const axios = require('axios');
 const COINMARKETCAP_BASE_URL = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency';
 
 // Récupérer la liste des crypto-monnaies
-const getCryptos = async (req, res) => {
+const listCryptos = async (req, res) => {
   try {
     const response = await axios.get(`${COINMARKETCAP_BASE_URL}/listings/latest`, {
       headers: {
@@ -25,7 +25,7 @@ const getCryptos = async (req, res) => {
 };
 
 // Récupérer les détails d'une crypto-monnaie spécifique
-const getCryptoDetails = async (req, res) => {
+const getCrypto = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -47,6 +47,6 @@ const getCryptoDetails = async (req, res) => {
 };
 
 module.exports = {
-  getCryptos,
-  getCryptoDetails,
+  listCryptos,
+  getCrypto,
 };

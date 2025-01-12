@@ -1,10 +1,11 @@
 const express = require('express');
-const { getCryptos, getCryptoDetails } = require('../controllers/cryptoController');
-const authenticate = require('../middlewares/authMiddleware');
+const { listCryptos, getCrypto } = require('../controllers/cryptoController');
 const router = express.Router();
 
-// Routes pour les crypto-monnaies
-router.get('/', authenticate, getCryptos); // Liste des crypto-monnaies
-router.get('/:id', authenticate, getCryptoDetails); // Détails d'une crypto-monnaie
+// GET /cryptos - List all cryptocurrencies
+router.get('/', listCryptos);
+
+// GET /cryptos/:id - Get details of a specific cryptocurrency
+router.get('/:id', getCrypto);
 
 module.exports = router;
