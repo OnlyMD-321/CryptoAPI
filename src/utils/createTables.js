@@ -9,9 +9,9 @@ const createTables = async () => {
         password VARCHAR(255) NOT NULL,
         confirmpassword VARCHAR(255) NOT NULL,
         token VARCHAR(255),
-        isverified BOOLEAN DEFAULT false,
+        is_verified BOOLEAN DEFAULT false,
         otp VARCHAR(6),
-        createdat TIMESTAMP DEFAULT NOW()
+        created_at TIMESTAMP DEFAULT NOW()
       );
     `;
   
@@ -20,7 +20,7 @@ const createTables = async () => {
         id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         userId INT REFERENCES users(id) ON DELETE CASCADE,
-        createdAt TIMESTAMP DEFAULT NOW()
+        created_At TIMESTAMP DEFAULT NOW()
       );
     `;
   
@@ -31,7 +31,7 @@ const createTables = async () => {
         crypto VARCHAR(255) NOT NULL,
         quantity NUMERIC(10, 2) NOT NULL,
         acquisitionCost NUMERIC(15, 2) NOT NULL,
-        createdAt TIMESTAMP DEFAULT NOW()
+        created_At TIMESTAMP DEFAULT NOW()
       );
     `;
   

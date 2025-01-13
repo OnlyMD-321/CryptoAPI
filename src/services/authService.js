@@ -35,7 +35,7 @@ class AuthService {
     
     // Insert new user into the database
     return await DBFactory.insert(
-      'INSERT INTO Users (email, password, confirm_password, otp) VALUES ($1, $2, $3, $4) RETURNING id, email, otp, created_at',
+      'INSERT INTO Users (email, password, confirmpassword, otp) VALUES ($1, $2, $3, $4) RETURNING id, email, otp, created_at',
       [email, hashedPassword, hashedPassword, verificationCode]
     );
 
