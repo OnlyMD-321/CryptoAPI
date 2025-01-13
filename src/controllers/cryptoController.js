@@ -1,52 +1,30 @@
-const axios = require('axios');
+const { getCryptocurrencies, getCryptoDetailsById } = require('../services/cryptoService');
 
-// URL de base de l'API CoinMarketCap
-const COINMARKETCAP_BASE_URL = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency';
-
-// Récupérer la liste des crypto-monnaies
-const getCryptos = async (req, res) => {
+// Fetch and return all cryptocurrencies
+const listCryptos = async (req, res) => {
   try {
-    const response = await axios.get(`${COINMARKETCAP_BASE_URL}/listings/latest`, {
-      headers: {
-        'X-CMC_PRO_API_KEY': process.env.COINMARKETCAP_API_KEY,
-      },
-      params: {
-        start: 1,
-        limit: 50,
-        convert: 'USD',
-      },
-    });
-
-    res.status(200).json(response.data.data);
+    const cryptos = await getCryptocurrencies();
+    res.status(200).json({ success: true, data: cryptos });
   } catch (error) {
-    console.error(error.response?.data || error.message);
-    res.status(500).json({ message: 'Error fetching cryptocurrencies' });
+    console.error('Error:', error.response?.data || error.message);
+    res.status(500).json({ success: false, message: 'Unable to fetch cryptocurrency data.' });
   }
 };
 
-// Récupérer les détails d'une crypto-monnaie spécifique
+// Fetch details of a specific cryptocurrency by ID
 const getCryptoDetails = async (req, res) => {
-  const { id } = req.params;
-
+  const { id } = req.params;  
+  
+  if (!id) return res.status(400).json({ success: false, message: 'Cryptocurrency ID is required.' });
   try {
-    const response = await axios.get(`${COINMARKETCAP_BASE_URL}/quotes/latest`, {
-      headers: {
-        'X-CMC_PRO_API_KEY': process.env.COINMARKETCAP_API_KEY,
-      },
-      params: {
-        id,
-        convert: 'USD',
-      },
-    });
-
-    res.status(200).json(response.data.data[id]);
+    const cryptoDetails = await getCryptoDetailsById(id);
+    res.status(200).json({ success: true, data: cryptoDetails });
   } catch (error) {
-    console.error(error.response?.data || error.message);
-    res.status(500).json({ message: 'Error fetching cryptocurrency details' });
+    console.error('Error:', error.response?.data || error.message);
+    res.status(500).json({ success: false, message: 'Unable to fetch cryptocurrency details.' });
   }
 };
 
-module.exports = {
-  getCryptos,
-  getCryptoDetails,
-};
+
+
+module.exports = { listCryptos, getCryptoDetails };
