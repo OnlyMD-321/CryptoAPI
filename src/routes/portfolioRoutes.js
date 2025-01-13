@@ -1,28 +1,30 @@
 const express = require('express');
 const {
   createPortfolio,
-  addCryptoToPortfolio,
-  editPortfolioItem,
-  deletePortfolioItem,
-  viewPortfolioPerformance,
+  getPortfolios,
+  getPortfolioById,
+  updatePortfolio,
+  deletePortfolio,
 } = require('../controllers/portfolioController');
 const authenticate = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
 // Create Portfolio
-router.post('/create', authenticate, createPortfolio);
+router.post('/', authenticate, createPortfolio);
 
-// Add Cryptocurrency to Portfolio
-router.post('/add', authenticate, addCryptoToPortfolio);
+// get portfolio
+router.get('/', authenticate, getPortfolios);
 
-// Edit Portfolio Item
-router.put('/edit/:id', authenticate, editPortfolioItem);
+// get portfolio by id
+router.get('/:id', authenticate, getPortfolioById);
 
-// Delete Portfolio Item
-router.delete('/delete/:id', authenticate, deletePortfolioItem);
+// update portfolio
+router.put('/:id', authenticate, updatePortfolio);
 
-// View Portfolio Performance
-router.get('/performance', authenticate, viewPortfolioPerformance);
+// delete portfolio
+router.delete('/:id', authenticate, deletePortfolio);
+
+
 
 module.exports = router;

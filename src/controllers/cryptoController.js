@@ -1,6 +1,6 @@
 const { getCryptocurrencies, getCryptoDetailsById } = require('../services/cryptoService');
 
-// Fetch and return all cryptocurrencies
+// Fetch and return all cryptocurrenciesz
 const listCryptos = async (req, res) => {
   try {
     const cryptos = await getCryptocurrencies();
