@@ -34,24 +34,43 @@ const getCryptocurrencies = async () => {
 // Fetch details of a cryptocurrency by ID
 const getCryptoDetailsById = async (id) => {
     try {
-        const response = await axios.get(`${BASE_URL}/cryptocurrency/info`, {
+        // Fetch metadata from cryptocurrency/info
+        const infoResponse = await axios.get(`${BASE_URL}/cryptocurrency/info`, {
             headers: {
                 'X-CMC_PRO_API_KEY': API_KEY,
             },
             params: { id },
         });
 
-        const cryptoData = response.data.data[id];
-        if (!cryptoData) throw new Error('Cryptocurrency not found.');
+        const cryptoData = infoResponse.data.data[id];
+        if (!cryptoData) {
+            throw new Error('Cryptocurrency not found.');
+        }
 
+        // Fetch latest price from cryptocurrency/quotes/latest
+        const quotesResponse = await axios.get(`${BASE_URL}/cryptocurrency/quotes/latest`, {
+            headers: {
+                'X-CMC_PRO_API_KEY': API_KEY,
+            },
+            params: {
+                id,
+                convert: 'USD', // Convert prices to USD
+            },
+        });
+
+        const quoteData = quotesResponse.data.data[id].quote.USD;
+
+        // Combine metadata and price data
         return {
             id: cryptoData.id,
             name: cryptoData.name,
             symbol: cryptoData.symbol,
+            current_price: quoteData.price,
             description: cryptoData.description,
             logo: cryptoData.logo,
-            tags: cryptoData.tags,
             category: cryptoData.category,
+            market_cap: quoteData.market_cap,
+            volume_24h: quoteData.volume_24h,
         };
     } catch (error) {
         console.error('Error fetching cryptocurrency details:', error.response?.data || error.message);

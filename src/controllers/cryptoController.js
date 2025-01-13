@@ -13,9 +13,9 @@ const listCryptos = async (req, res) => {
 
 // Fetch details of a specific cryptocurrency by ID
 const getCryptoDetails = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params;  
+  
   if (!id) return res.status(400).json({ success: false, message: 'Cryptocurrency ID is required.' });
-
   try {
     const cryptoDetails = await getCryptoDetailsById(id);
     res.status(200).json({ success: true, data: cryptoDetails });
