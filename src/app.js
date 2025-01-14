@@ -7,6 +7,8 @@ const rateLimit = require('express-rate-limit'); // Import rate limiter
 const routes = require('./routes/routes');
 const pool = require('./config/db');
 const createTables = require('./utils/createTables');
+const cron = require('node-cron');
+const { updatePortfolioAutomatically } = require('./utils/crons');
 
 // Charger les variables d'environnement
 dotenv.config();
@@ -32,9 +34,23 @@ const limiter = rateLimit({
 });
 
 // Apply rate limiter to all routes
-app.use(limiter);
+app.use((req, res, next) => {
+  // Skip rate limit for cron job routes
+  if (req.originalUrl.startsWith('/cryptos')) {
+    return next();
+  }
+  // Apply rate limiter for all other routes
+  limiter(req, res, next);
+});
 
 app.use('/', routes);
+
+
+
+// Schedule the cron job to run every 5 minutes
+cron.schedule("*/10 * * * * *", updatePortfolioAutomatically);
+
+
 
 // Route de test
 app.get('/', (req, res) => {
