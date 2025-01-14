@@ -42,7 +42,4 @@ router.put('/:id/items/:item_id', authenticate, editPortfolioItem);
 // Delete Portfolio Item
 router.delete('/:id/items/:item_id', authenticate, deletePortfolioItem);
 
-// View Portfolio Performance
-router.get('/performance', authenticate, viewPortfolioPerformance);
-
 module.exports = router;

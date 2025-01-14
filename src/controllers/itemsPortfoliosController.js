@@ -80,5 +80,4 @@ module.exports = {
   addCryptoToPortfolio,
   editPortfolioItem,
   deletePortfolioItem,
-  viewPortfolioPerformance,
 };
