@@ -1,43 +1,63 @@
 const DBFactory = require('../factories/crudFactory');
-const axios = require('axios');
+const { getCryptoDetailsById } = require('./cryptoService');
 
 const PerformanceService = {
 
-
-  // View portfolio performance with real-time updates
-  getPortfolioPerformance: async (userId) => {
+  updatePortfolioValueRealTime: async (portfolioItems) => {
     try {
-      // Fetch the portfolio of the user
-      const portfolioQuery = 'SELECT * FROM portfolios WHERE userId = $1';
-      const portfolioResult = await DBFactory.findOne(portfolioQuery, [userId]);
+      let updatedItems = [];
 
-      if (portfolioResult.rows.length === 0) {
-          throw new Error('No portfolio found for this user.');
+      for (const item of portfolioItems) {
+        const cryptoDetails = await getCryptoDetailsById(item.crypto_id);
+        // Check if the acquisition_cost changed ( check just the umber and the 2 numbers after the decimal point)
+        if (
+          parseFloat(cryptoDetails.current_price.toFixed(2)) !==
+          parseFloat(Number(item.acquisition_cost).toFixed(2))
+        ) {
+          // Update the portfolio item with the new price
+          const updateQuery = 'UPDATE portfolio_items SET acquisition_cost = $1 WHERE id = $2';
+          await DBFactory.update(updateQuery, [cryptoDetails.current_price, item.id]);
+          updatedItems.push(item);
+        }
       }
 
-      const portfolio = portfolioResult.rows[0];
-
-      // Fetch the portfolio items
-      const portfolioItemsQuery = 'SELECT * FROM portfolio_items WHERE portfolio_id = $1';
-      const portfolioItemsResult = await DBFactory.findOne(portfolioItemsQuery, [portfolio.id]);
-
-      const portfolioItems = portfolioItemsResult.rows;
-      let totalValue = 0;
-
-      // Fetch crypto details for each portfolio item and calculate the total value
-      for (let item of portfolioItems) {
-          const cryptoDetails = await getCryptoDetailsById(item.crypto_id);
-          const currentValue = cryptoDetails.current_price * item.quantity;
-          totalValue += currentValue;
+      if (updatedItems.length === 0) {
+        return { message: 'No portfolio items updated' };
       }
+      return { message: 'Portfolio items updated successfully', updatedItems };
 
-      return { portfolio: portfolio.name, totalValue };
-
-  } catch (error) {
-      console.error('Error fetching portfolio performance:', error.message);
-      throw new Error('Unable to fetch portfolio performance.');
-  }
+    } catch (error) {
+      console.error('Error updating portfolio value:', error);
+      throw error;
+    }
   },
+
+
+  Calculate_profit_loss: async (portfolioItem) => {
+    try {
+      // Validate input
+      if (typeof portfolioItem !== 'object' || Array.isArray(portfolioItem)) {
+        throw new TypeError('portfolioItem must be an object');
+      }
+  
+      // Get crypto details
+      const cryptoDetails = await getCryptoDetailsById(portfolioItem.crypto_id);
+  
+      // Calculate the total value of the portfolio
+      const totalValue = cryptoDetails.current_price * parseFloat(portfolioItem.quantity);
+  
+      // Calculate the profit or loss
+      const profitLoss = totalValue - parseFloat(portfolioItem.acquisition_cost);
+  
+      return { message: 'Profit/Loss calculated successfully', "profit/Loss" : profitLoss };
+    } catch (error) {
+      console.error('Error calculating profit or loss:', error);
+      throw error;
+    }
+  }
+  
+  
+
 
 };
 
