@@ -10,7 +10,7 @@ const pool = new Pool(
   isProduction
     ? {
         connectionString: process.env.DATABASE_URL,
-        ssl: { rejectUnauthorized: false }, // Required for Render's managed PostgreSQL
+        ssl: false, 
       }
     : {
         user: process.env.DB_USER,          // Local PostgreSQL username
@@ -18,6 +18,7 @@ const pool = new Pool(
         database: process.env.DB_DATABASE,  // Local database name
         password: process.env.DB_PASSWORD,  // Local password
         port: process.env.DB_PORT,          // Local PostgreSQL port
+        ssl: false,                         // Disable SSL for local connections
       }
 );
 
