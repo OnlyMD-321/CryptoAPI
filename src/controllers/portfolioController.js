@@ -1,4 +1,5 @@
 const PortfolioService = require('../services/portfolioService');
+const DBFactory = require('../factories/crudFactory');
 
 const createPortfolio = async (req, res) => {
   const { userId, name } = req.body;
@@ -12,7 +13,6 @@ const createPortfolio = async (req, res) => {
 };
 
 const getPortfolios = async (req, res) => {
-  const { portfolioId } = req.params;
 
   try {
     const portfolio = await PortfolioService.getPortfolios();
@@ -23,8 +23,15 @@ const getPortfolios = async (req, res) => {
 }
 
 const getPortfolioById = async (req, res) => {
-  const { id } = req.params;  
+  const { id } = req.params;
   try {
+    // check if the portfolio exists
+    const portf = await DBFactory.findOne(`SELECT * FROM portfolios WHERE id = $1 `, [id]);
+
+    if (!portf) {
+      throw new Error('Portfolio not exist');
+    }
+
     const portfolio = await PortfolioService.getPortfolioById(id);
     res.status(200).json(portfolio);
   } catch (error) {
@@ -38,8 +45,15 @@ const updatePortfolio = async (req, res) => {
   const { name } = req.body;
 
   try {
-    const portfolio = await PortfolioService.updatePortfolio(id, name);
-    res.status(200).json( {"message" : 'Portfolio updated successfully', "name" : name});;
+    // check if the portfolio exists
+    const portfolio = await DBFactory.findOne(`SELECT * FROM portfolios WHERE id = $1 `, [id]);
+
+    if (!portfolio) {
+      throw new Error('Portfolio not exist');
+    }
+
+    await PortfolioService.updatePortfolio(id, name);
+    res.status(200).json({ "message": 'Portfolio updated successfully', "name": name });;
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -50,12 +64,19 @@ const deletePortfolio = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const portfolio = await PortfolioService.deletePortfoliobyID(id);
-    res.status(200).json( {"message" : 'Portfolio deleted successfully' , "portfolioId" : id});;
+    // check if the portfolio exists
+    const portfolio = await DBFactory.findOne(`SELECT * FROM portfolios WHERE id = $1 `, [id]);
+
+    if (!portfolio) {
+      throw new Error('Portfolio not exist');
+    }
+    
+    await PortfolioService.deletePortfoliobyID(id);
+    res.status(200).json({ "message": 'Portfolio deleted successfully', "portfolioId": id });;
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-  
+
 }
 
 const addCryptoToPortfolio = async (req, res) => {

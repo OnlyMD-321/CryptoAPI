@@ -40,7 +40,7 @@ router.post('/:id/items', authenticate, addCryptoToPortfolio);
 router.put('/:id/items/:item_id', authenticate, editPortfolioItem);
 
 // Delete Portfolio Item
-router.delete('/:id/items/:item_id:', authenticate, deletePortfolioItem);
+router.delete('/:id/items/:item_id', authenticate, deletePortfolioItem);
 
 // View Portfolio Performance
 router.get('/performance', authenticate, viewPortfolioPerformance);

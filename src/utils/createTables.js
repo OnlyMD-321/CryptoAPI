@@ -27,11 +27,12 @@ const createTables = async () => {
     const createPortfolioItemsTableQuery = `
       CREATE TABLE IF NOT EXISTS portfolio_items (
         id SERIAL PRIMARY KEY,
-        portfolioId INT REFERENCES portfolios(id) ON DELETE CASCADE,
-        crypto VARCHAR(255) NOT NULL,
+        portfolio_id INT REFERENCES portfolios(id) ON DELETE CASCADE,
+        crypto_id VARCHAR(255) NOT NULL,
         quantity NUMERIC(10, 2) NOT NULL,
-        acquisitionCost NUMERIC(15, 2) NOT NULL,
-        created_At TIMESTAMP DEFAULT NOW()
+        acquisition_cost NUMERIC(15, 2) NOT NULL,
+        created_At TIMESTAMP DEFAULT NOW(),
+        updated_At TIMESTAMP DEFAULT NOW()
       );
     `;
   
