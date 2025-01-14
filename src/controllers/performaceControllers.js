@@ -3,7 +3,6 @@ const DBFactory = require('../factories/crudFactory');
 
 const viewPortfolioPerformance = async (req, res) => {
   const { id } = req.params;
-  console.log("id", id);
   
   try {
     // check if the portfolio exists
@@ -13,7 +12,7 @@ const viewPortfolioPerformance = async (req, res) => {
       throw new Error('Portfolio not found');
     }
 
-    const performance = await PerformanceService.viewPortfolioPerformance(id);
+    const performance = await PerformanceService.getPortfolioPerformance(id);
     res.status(200).json({ message: 'Portfolio performance retrieved successfully', performance });
   } catch (error) {
     res.status(400).json({ message: error.message });

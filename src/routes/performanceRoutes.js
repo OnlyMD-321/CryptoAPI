@@ -4,6 +4,6 @@ const router = express.Router();
 const { viewPortfolioPerformance } = require('../controllers/performaceControllers');
 
 // View Portfolio Performance
-router.get('/performance/:id', viewPortfolioPerformance);
+router.get('/:id', viewPortfolioPerformance);
 
 module.exports = router;
