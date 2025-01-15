@@ -76,10 +76,10 @@ src/
 - **Utilities**:  
   - `axios`: For HTTP requests.  
   - `dotenv`: For managing environment variables.  
-  - `sequelize`: ORM for database operations.  
+  - `pg-Pool`: Fro Pool connexion node-postgres.  
   - `cors`: For enabling Cross-Origin Resource Sharing in the server to handle requests from different origins.  
   - `crons`: For scheduling and running cron jobs in the application.  
-  - `Design Patterns`: for maintaining clean, scalable, and maintainable code structures.  
+  - `Design Patterns`: For maintaining clean, scalable, and maintainable code structures.  
 
 ---
 
