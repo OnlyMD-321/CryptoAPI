@@ -2,6 +2,49 @@
 
 CryptoCore is a RESTful API backend designed to simplify cryptocurrency portfolio management. It provides secure user authentication, real-time cryptocurrency data integration, and portfolio tracking, enabling users to manage their investments effectively. The API is deployed on Render and integrates with the CoinMarketCap API for accurate market data.
 
+## **Project Structure**
+The project is structured into several folders and files, each responsible for different aspects of the application:
+
+|
+|
+|--- **src**
+|   |--- **config**
+|   |   |--- **config.js**
+|   |--- **controllers**
+|   |   |--- **authController.js**
+|   |   |--- **cryptoController.js**
+|   |   |--- **itemsPortfoliosController.js**
+|   |   |--- **portfolioController.js**
+|   |   |--- **performanceController.js**
+|   |--- **factories**
+|   |   |--- **crudFactory.js**
+|   |--- **middlewares**
+|   |   |--- **authMiddleware.js**
+|   |--- **routes**
+|   |   |--- **authRoutes.js**
+|   |   |--- **cryptoRoutes.js**
+|   |   |--- **portfolioRoutes.js**
+|   |   |--- **performanceRoutes.js**
+|   |   |--- **routes.js**
+|   |--- **services**
+|   |   |--- **authService.js**
+|   |   |--- **cryptoService.js**
+|   |   |--- **itemsPortfoliosService.js**
+|   |   |--- **portfolioService.js**
+|   |   |--- **performanceService.js**
+|   |--- **utils**
+|   |   |--- **createTables.js**
+|   |   |--- **crons.js**
+|   |   |--- **mailer.js**
+|   |--- **view**
+|   |   |--- **verificationForEmail.ejs**
+|   |   |--- **verificationForPassword.ejs**
+|   |--- **index.js**
+|--- **.env**
+|--- **README.md**
+|--- **package-lock.json**
+
+
 ## **Table of Contents**
 1. [Features](#features)  
 2. [Technologies Used](#technologies-used)  
@@ -32,6 +75,9 @@ CryptoCore is a RESTful API backend designed to simplify cryptocurrency portfoli
   - `axios`: For HTTP requests.  
   - `dotenv`: For managing environment variables.  
   - `sequelize`: ORM for database operations.  
+  - `cors`: For enabling Cross-Origin Resource Sharing in the server to handle requests from different origins.  
+  - `crons`: For scheduling and running cron jobs in the application.  
+  - `Design Patterns`: for maintaining clean, scalable, and maintainable code structures.  
 
 ---
 
@@ -50,7 +96,7 @@ CryptoCore is a RESTful API backend designed to simplify cryptocurrency portfoli
    ```
 2.  **Run Migrations**:
     ```bash
-    npx sequelize-cli db:migrate
+    npm install
     ```
 3. **Start the Server**
     ```bash
@@ -67,6 +113,7 @@ The API will be available at:
 | Method | Endpoint          | Description              |
 |--------|-------------------|--------------------------|
 | POST   | `/auth/signup`    | Register a new user.     |
+| POST   | `/auth/verify`    | Verify email.           |
 | POST   | `/auth/login`     | Login and get a JWT.     |
 
 ### **Portfolio Management**
@@ -76,6 +123,19 @@ The API will be available at:
 | POST   | `/portfolios`          | Create a new portfolio.           |
 | PUT    | `/portfolios/:id`      | Update a portfolio.               |
 | DELETE | `/portfolios/:id`      | Delete a portfolio.               |
+
+### **Items portfolio Management**
+| Method | Endpoint                          | Description                       |
+|--------|------------------------------------|-----------------------------------|
+| POST   | `/:id/items`                      | Add an item to a portfolio.       |
+| PUT    | `/:portfolio_id/items/:item_id`   | Update an item in a portfolio.    |
+| DELETE | `/:portfolio_id/items/:item_id`   | Remove an item from a portfolio.  |
+
+### **Performance Data**
+| Method | Endpoint                                      | Description                                   |
+|--------|-----------------------------------------------|------------------------------------------------|
+| GET    | `/performance/:id`                               | Get performance data for a portfolio.      |
+| GET    | `/performance/:id/profit-loss/:items_id`         | Calculate profit or loss for a portfolio.  |
 
 ### **Cryptocurrency Data**
 | Method | Endpoint            | Description                        |
