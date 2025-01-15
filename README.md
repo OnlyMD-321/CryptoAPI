@@ -42,7 +42,7 @@ src/
 ├── app.js: Entry point for the application.
 ├── .env: Environment configuration file for sensitive data.
 ├── README.md: Documentation file for the project.
-├── package-lock.json: Auto-generated file for locking package versions.
+└── package-lock.json: Auto-generated file for locking package versions.
 ```
 
 
