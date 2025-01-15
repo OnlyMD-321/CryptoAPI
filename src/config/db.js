@@ -10,7 +10,9 @@ const pool = new Pool(
   isProduction
     ? {
         connectionString: process.env.DATABASE_URL,
-        ssl: false, 
+        ssl: {
+          rejectUnauthorized: false, // This disables certificate verification; for production, consider providing a CA certificate
+        },
       }
     : {
         user: process.env.DB_USER,          // Local PostgreSQL username
