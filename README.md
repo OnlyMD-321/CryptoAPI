@@ -9,7 +9,8 @@ The project is structured into several folders and files, each responsible for d
 src/
 ├── config/
 │ └── config.js: Contains application configuration settings.
-├── controllers/
+├── controllers/![image](https://github.com/user-attachments/assets/bc0f18c6-d67f-4476-9d85-e392ee147834)
+
 │ ├── authController.js: Handles authentication-related operations.
 │ ├── cryptoController.js: Manages cryptocurrency-related operations.
 │ ├── itemsPortfoliosController.js: Manages items within portfolios.
