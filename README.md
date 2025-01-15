@@ -6,7 +6,44 @@ CryptoCore is a RESTful API backend designed to simplify cryptocurrency portfoli
 The project is structured into several folders and files, each responsible for different aspects of the application:
 
 
-![image](https://github.com/user-attachments/assets/a706f385-7262-4abe-a54a-83d95ce86837)
+```bash
+src/
+├── config/
+│ └── config.js: Contains application configuration settings.
+├── controllers/
+│ ├── authController.js: Handles authentication-related operations.
+│ ├── cryptoController.js: Manages cryptocurrency-related operations.
+│ ├── itemsPortfoliosController.js: Manages items within portfolios.
+│ ├── portfolioController.js: Handles portfolio management.
+│ └── performanceController.js: Tracks and reports performance metrics.
+├── factories/
+│ └── crudFactory.js: Factory for generic CRUD operations.
+├── middlewares/
+│ └── authMiddleware.js: Middleware for authentication and authorization.
+├── routes/
+│ ├── authRoutes.js: Routes for authentication operations.
+│ ├── cryptoRoutes.js: Routes for cryptocurrency-related operations.
+│ ├── portfolioRoutes.js: Routes for portfolio management.
+│ ├── performanceRoutes.js: Routes for performance-related operations.
+│ └── routes.js: Main route file combining all routes.
+├── services/
+│ ├── authService.js: Contains business logic for authentication.
+│ ├── cryptoService.js: Business logic for cryptocurrency operations.
+│ ├── itemsPortfoliosService.js: Logic for managing items in portfolios.
+│ ├── portfolioService.js: Business logic for portfolio management.
+│ └── performanceService.js: Logic for performance tracking.
+├── utils/
+│ ├── createTables.js: Utility for creating database tables.
+│ ├── crons.js: Scripts for scheduled tasks (cron jobs).
+│ └── mailer.js: Utility for sending emails.
+├── view/
+│ ├── verificationForEmail.ejs: Email template for account verification.
+│ └── verificationForPassword.ejs: Email template for password reset.
+├── app.js: Entry point for the application.
+├── .env: Environment configuration file for sensitive data.
+├── README.md: Documentation file for the project.
+├── package-lock.json: Auto-generated file for locking package versions.
+```
 
 
 
