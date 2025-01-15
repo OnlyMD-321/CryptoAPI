@@ -15,8 +15,9 @@ async function updatePortfolioAutomatically() {
                 console.log("acquisition" , parseFloat(Number(item.acquisition_cost).toFixed(2)));
                 
                 // Update the portfolio item with the new price
-                const updateQuery = 'UPDATE portfolio_items SET acquisition_cost = $1 WHERE id = $2';
-                await DBFactory.update(updateQuery, [cryptoDetails.current_price, item.id]);
+                const currentTimestamp = new Date();
+                const updateQuery = 'UPDATE portfolio_items SET acquisition_cost = $1, updated_at = $2 WHERE id = $3';
+                await DBFactory.update(updateQuery, [cryptoDetails.current_price, currentTimestamp, item.id]);
                 updatedItems.push(item);
             }
         }
