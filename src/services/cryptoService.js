@@ -24,8 +24,6 @@ const getCryptocurrencies = async () => {
             current_price: crypto.quote.USD.price,
             market_cap: crypto.quote.USD.market_cap,
             volume: crypto.quote.USD.volume_24h,
-            logo: cryptoData.logo,
-
         }));
     } catch (error) {
         console.error('Error fetching cryptocurrencies:', error.response?.data || error.message);
